@@ -14,6 +14,12 @@ checkAge(105)*/
 
 //var canvas = document.getElementById("myCanvas");
 //var ctx = canvas.getContext("2d");
+var canvas = document.createElement("canvas");
+var body = document.getElementsByTagName("body")[0];
+canvas.setAttribute("width", 600);
+canvas.setAttribute("height", 400);
+canvas.setAttribute("id", "canvas")
+body.appendChild(canvas);
 
 function draw(callback) {
     var ctx = document.getElementById('canvas').getContext("2d");
@@ -68,6 +74,52 @@ function drawBlack() {
     ctx.fill();
 }
 
+function parseQuote(data) {
+    alert(data.quoteText);
+}
+
+function getText() {
+    // $.get("https://api.forismatic.com/api/1.0/?method=getQuote&format=jsonp&jsonp=parseQuote", function (data, status) {
+    //     alert("Data: " + data + "\nStatus: " + status);
+    // });
+    $.ajax({
+        url: "https://api.forismatic.com/api/1.0/?method=getQuote&format=jsonp&jsonp=parseQuote",
+        // The name of the callback parameter, as specified by the YQL service
+        jsonp: "callback",
+
+        // Tell jQuery we're expecting JSONP
+        dataType: "jsonp",
+
+        // Work with the response
+        success: function (response) {
+            alert(response); // server response
+        }
+    });
+}
+
+/*
+function getText() {
+    var ctx = document.getElementById('canvas').getContext("2d");
+    // 1. Создаём новый объект XMLHttpRequest
+    var xhr = new XMLHttpRequest();
+    // 2. Конфигурируем его: GET-запрос на URL 'phones.json'
+    xhr.open('GET', 'phones.json', false)
+    // 3. Отсылаем запрос
+    xhr.send();
+    // 4. Если код ответа сервера не 200, то это ошибка
+    if (xhr.status != 200) {
+        // обработать ошибку
+        alert(xhr.status + ': ' + xhr.statusText); // пример вывода: 404: Not Found
+    } else {
+        // вывести результат
+        alert(xhr.responseText); // responseText -- текст ответа.
+    }
+}
+*/
+
+
+// https://api.forismatic.com/api/1.0/?method=getQuote&format=jsonp&jsonp=parseQuote
 draw(drawBlack);
+getText();
 //drawBlack();
 
