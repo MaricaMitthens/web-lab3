@@ -20,6 +20,13 @@ canvas.setAttribute("width", 600);
 canvas.setAttribute("height", 400);
 canvas.setAttribute("id", "canvas")
 body.appendChild(canvas);
+var br = document.createElement("br");
+body.appendChild(br);
+var btn = document.createElement("button");
+btn.innerText = "press me";
+btn.setAttribute("onclick", "downloadImage()");
+body.appendChild(btn);
+
 
 function draw(callback) {
     var ctx = document.getElementById('canvas').getContext("2d");
@@ -75,35 +82,83 @@ function drawBlack() {
 }
 
 function parseQuote(data) {
-    alert(data.quoteText);
+    //alert(data.quoteText);
+    console.log("gettext");
+    splitText(data.quoteText);
+    return data.quoteText; // server response
+
 }
 
 function getText() {
-    // $.get("https://api.forismatic.com/api/1.0/?method=getQuote&format=jsonp&jsonp=parseQuote", function (data, status) {
-    //     alert("Data: " + data + "\nStatus: " + status);
-    // });
+    console.log("gettext");
     $.ajax({
         url: "https://api.forismatic.com/api/1.0/?method=getQuote&format=jsonp&jsonp=parseQuote",
         // The name of the callback parameter, as specified by the YQL service
         jsonp: "callback",
-
         // Tell jQuery we're expecting JSONP
         dataType: "jsonp",
-
-        // Work with the response
-        success: function (response) {
-            alert(response); // server response
-        }
     });
+
 }
 
 
-function drawText() {
+function drawText(rows) {
     var ctx = document.getElementById('canvas').getContext('2d');
-    ctx.font = "48px serif";
+    ctx.font = "24px serif";
     ctx.fillStyle = "white";
     ctx.textAlign = "center";
-    ctx.fillText("Hello world", 300, 200);
+    var dy = 30;
+    var len = rows.length / 2 - 0.5;
+    console.log(len);
+    for (var i = 0; i < rows.length; i++) {
+        ctx.fillText(rows[i], 300, 200 - len * dy);
+        len--;
+    }
+    //ctx.fillText("Hello world Hello world Hello world", 300, 200);
+}
+
+function splitText(text) {
+    console.log("gettext");
+    var words = text.split(' ');
+    console.log(words);
+    var a = 0;
+    var rows = [];
+    var str = "";
+    while (words.length != 0) {
+        if (a > 30) {
+            a = 0;
+            rows.push(str);
+            str = "";
+        }
+        a += words[0].length;
+        str += " ";
+        str += words[0];
+        words.splice(0, 1);
+    }
+    rows.push(str);
+    // for (var i = 0; i < words.length; i++) {
+    //     a += words[i].length;
+    //     str += " ";
+    //     str += words[i];
+    //     words.slice[0, 1];
+    //     if (a > 30) {
+    //         a = 0;
+    //         rows.push(str);
+    //         str = "";
+    //     }
+    // }
+    console.log(rows);
+    drawText(rows);
+}
+
+function downloadImage() {
+    var canvas = document.getElementById('canvas');
+    console.log(canvas);
+    var dataURL = canvas.toDataURL("image/jpeg");
+    var link = document.createElement("a");
+    link.href = dataURL;
+    link.download = "my-image-name.jpg";
+    link.click();
 }
 
 /*
@@ -130,6 +185,16 @@ function getText() {
 // https://api.forismatic.com/api/1.0/?method=getQuote&format=jsonp&jsonp=parseQuote
 draw(drawBlack);
 
-getText();
+//getText();
 //drawBlack();
-setTimeout(function () { drawText() }, 7000)
+setTimeout(function () { getText() }, 7000);
+
+
+// input = document.createElement("input");
+// input.type = "button";
+// input.value = "Remove";
+// input.setAttribute("onclick", "remove_market_meta('MarkeID9')");
+// input.
+//fragment.appendChild("input");
+
+//setTimeout(function () { downloadImage() }, 10000)
