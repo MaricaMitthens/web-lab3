@@ -97,6 +97,15 @@ function getText() {
     });
 }
 
+
+function drawText() {
+    var ctx = document.getElementById('canvas').getContext('2d');
+    ctx.font = "48px serif";
+    ctx.fillStyle = "white";
+    ctx.textAlign = "center";
+    ctx.fillText("Hello world", 300, 200);
+}
+
 /*
 function getText() {
     var ctx = document.getElementById('canvas').getContext("2d");
@@ -120,6 +129,7 @@ function getText() {
 
 // https://api.forismatic.com/api/1.0/?method=getQuote&format=jsonp&jsonp=parseQuote
 draw(drawBlack);
+
 getText();
 //drawBlack();
-
+setTimeout(function () { drawText() }, 7000)
